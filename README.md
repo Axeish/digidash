@@ -32,6 +32,20 @@
 
 ## ️ Setup Instructions
 
+- [TODO] setup git+vite+react+typescript
+- [TODO] Add start game mechanics and timer 
+- [TODO] Show Multiplication questions and option and track selected answer
+- [TODO] Score board and endgame , play again button
+- [TODO] Scoring logic implementation complexity
+- [TODO] Authentication, firebase, google login and guest user with random id (convert guest to real user after login)
+- [TODO] Save score per user in firestore and Fetch & display leaderboard from Firestore
+- [TODO] Setup backend folder with FastAPI app
+- [TODO] Add /save-score, /leaderboard, /auth endpoints
+- [TODO] Postgress
+- [TODO] Secure with JWT or Firebase UID
+- [TODO] Show users past score with dates
+
+
 ###  Frontend (React)
 
 ```bash
