@@ -38,3 +38,21 @@
 cd frontend
 npm install
 npm run dev
+```
+###  Backend (FASTAPI)
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+### Auth Flow
+- Guest users get a random ID like user_87349821
+- Users can sign up with Google or email/password
+- Logged-in users’ scores are saved and ranked
+- Guest scores are kept locally unless they sign in
+
+## Created By
+Ashish Kumar
+
+Axeishkr@gmail.com
