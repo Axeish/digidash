@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import './App.css';
+
 
 type Question = {
   num1: number;
@@ -91,156 +93,86 @@ function App() {
 
 
   return (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#1a1a1a',
-    padding: '1rem',
-    boxSizing: 'border-box'
-  }}>
-    <div style={{
-      border: '2px solid #ccc',
-      borderRadius: '10px',
-      padding: '1.5rem',
-      maxWidth: '600px',
-      width: '100%',
-      backgroundColor: '#191919',
-      color: '#fff',
-      textAlign: 'center',
-    }}>
-      <h1 style={{ marginBottom: '1rem' }}>🎯 DigitDash</h1>
+<div className="main-section">
+  <div className="center-box">
+    <h1 className="title">🎯 DigitDash</h1>
 
-      {!gameStarted && !gameOver && (
-        <>
-          <button
-            onClick={startGame}
-            style={{
-              backgroundColor: 'green',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              border: 'none',
-              borderRadius: '5px',
-              fontSize: '1rem',
-              marginBottom: '1.2rem',
-              cursor: 'pointer'
-            }}
-          >
-            Start Game
-          </button>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-  <button onClick={() => startGame(1)} style={{ backgroundColor: 'green', color: 'white', padding: '0.5rem 1rem' }}>⭐ Start Easy</button>
-  <button onClick={() => startGame(2)} style={{ backgroundColor: 'orange', color: 'white', padding: '0.5rem 1rem' }}>⭐⭐ Start Medium</button>
-  <button onClick={() => startGame(3)} style={{ backgroundColor: 'red', color: 'white', padding: '0.5rem 1rem' }}>⭐⭐⭐ Start Hard</button>
-</div>
+    {!gameStarted && !gameOver && (
+      <>
 
 
-          {/* Scoring Rules Box */}
-          <div style={{ textAlign: 'left', fontSize: '0.95rem' }}>
-            <h3 style={{ textAlign: 'center' }}>📊 How Scoring Works</h3>
-            <ul style={{ listStyleType: 'square', paddingLeft: '1.2rem' }}>
-              <li><strong>✅ Correct Answer:</strong> +70 points</li>
-              <li><strong>❌ Wrong Answer:</strong> −20 points</li>
-              <li><strong>⏱️ Time Penalty:</strong> Answer slower = more score loss</li>
-              <li>
-                <strong>🔥 Streak Bonus:</strong>
-                <ul style={{ listStyleType: 'circle', marginTop: '0.25rem' }}>
-                  <li>5 in a row = +50</li>
-                  <li>10 in a row = +150</li>
-                  <li>20 in a row = +400</li>
-                  <li>30+ in a row = +1000 🎉</li>
-                </ul>
-              </li>
-              <li><strong>Speed Tip:</strong> Answer within 3 seconds for full points!</li>
-            </ul>
-          </div>
-        </>
-      )}
+        <div className="difficulty-buttons">
+          <button onClick={() => startGame(1)} className="easy">⭐ Start Easy</button>
+          <button onClick={() => startGame(2)} className="medium">⭐⭐ Start Medium</button>
+          <button onClick={() => startGame(3)} className="hard">⭐⭐⭐ Start Hard</button>
+        </div>
 
-      {gameStarted && question && (
-        <>
-          <h2>⏱ Time Left: {timeLeft}s</h2>
-          <p>📊 Score: {score}</p>
+        <div className="scoring-box">
+          <h3>📊 How Scoring Works</h3>
+          <ul>
+            <li><strong>✅ Correct Answer:</strong> +70 points</li>
+            <li><strong>❌ Wrong Answer:</strong> −20 points</li>
+            <li><strong>⏱️ Time Penalty:</strong> Answer slower = more score loss</li>
+            <li>
+              <strong>🔥 Streak Bonus:</strong>
+              <ul>
+                <li>5 in a row = +50</li>
+                <li>10 in a row = +150</li>
+                <li>20 in a row = +400</li>
+                <li>30+ in a row = +1000 🎉</li>
+              </ul>
+            </li>
+            <li><strong>Speed Tip:</strong> Answer within 3 seconds for full points!</li>
+          </ul>
+        </div>
+      </>
+    )}
 
-          <div style={{ marginTop: '1rem' }}>
-            <h3>{question.num1} × {question.num2} = ?</h3>
-            {question.options.map((opt, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleAnswer(opt)}
-                style={{
-                  margin: '0.5rem',
-                  padding: '0.75rem 1.25rem',
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                }}
-              >
-                {String.fromCharCode(97 + idx)}: {opt}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+    {gameStarted && question && (
+      <>
+        <h2>⏱ Time Left: {timeLeft}s</h2>
+        <p>📊 Score: {score}</p>
 
-      {gameOver && (
-        <>
-          {/* Top buttons */}
-          <div style={{
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '1rem',
-  marginBottom: '1rem',
-  flexWrap: 'wrap'
-}}>
-  <button
-    onClick={playAgain}
-    style={{
-      backgroundColor: 'green',
-      color: 'white',
-      border: 'none',
-      borderRadius: '5px',
-      padding: '0.5rem 1.2rem',
-      cursor: 'pointer'
-    }}
-  >
+        <div className="answer-options">
+          <h3>{question.num1} × {question.num2} = ?</h3>
+          {question.options.map((opt, idx) => (
+            <button key={idx} onClick={() => handleAnswer(opt)} className="answer-button">
+              {String.fromCharCode(97 + idx)}: {opt}
+            </button>
+          ))}
+        </div>
+      </>
+    )}
+
+    {gameOver && (
+      <>
+        <div className="final-buttons">
+  <button onClick={playAgain} className="button play-again">
     ▶️ Play Again
   </button>
-
   <button
-      onClick={() => {
-    setGameOver(false);
-    setShowRules(true);
-  }}
-    style={{
-      backgroundColor: '#555',
-      color: 'white',
-      border: 'none',
-      borderRadius: '5px',
-      padding: '0.5rem 1.2rem',
-      cursor: 'pointer'
+    onClick={() => {
+      setGameOver(false);
+      setShowRules(true);
     }}
+    className="button info-button"
   >
     ℹ️ Scoring Info
   </button>
 </div>
 
 
-          {/* Final Score Display */}
-          <div>
-            <h2> Game Over!</h2>
-            <p> Your Final Score: {score}</p>
-            <p> Correct Answers: {correctCount}</p>
-            <p> Wrong Answers: {wrongCount}</p>
-          </div>
-        </>
-      )}
-    </div>
+        <div>
+          <h2>Game Over!</h2>
+          <p>Your Final Score: {score}</p>
+          <p>Correct Answers: {correctCount}</p>
+          <p>Wrong Answers: {wrongCount}</p>
+        </div>
+      </>
+    )}
   </div>
+</div>
+
 );
 
 }
