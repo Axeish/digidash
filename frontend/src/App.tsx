@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import { useRef } from 'react';
 
 
 type Question = {
@@ -48,23 +49,43 @@ function App() {
   const [wrongCount, setWrongCount] = useState(0);
   const [showRules, setShowRules] = useState(true);
   const [difficulty, setDifficulty] = useState<number | null>(null);
+  const [highScore, setHighScore] = useState(() => {
+  const saved = localStorage.getItem('highScore');
+  return saved ? parseInt(saved) : 0;
+});
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (gameStarted && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft((t) => t - 1);
-      }, 1000);
-    }
-    if (timeLeft === 0 && gameStarted) {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timeRef = useRef(30); // separate from state
+
+useEffect(() => {
+  if (!gameStarted) return;
+
+  timeRef.current = 30; // reset on start
+  setTimeLeft(30);
+
+  timerRef.current = setInterval(() => {
+    timeRef.current -= 1;
+    setTimeLeft(timeRef.current);
+
+    if (timeRef.current === 0) {
+      clearInterval(timerRef.current!);
       setGameStarted(false);
       setGameOver(true);
+
+      if (score > highScore) {
+        setHighScore(score);
+        localStorage.setItem('highScore', score.toString());
+      }
     }
-    return () => clearInterval(timer);
-  }, [gameStarted, timeLeft]);
+  }, 1000);
+
+  return () => clearInterval(timerRef.current!);
+}, [gameStarted]);
+
+
 
   const startGame = (selectedDifficulty: number) => {
-    setTimeLeft(5);
+    setTimeLeft(30);
     setScore(0);
     setCorrectCount(0);
     setWrongCount(0);
@@ -171,6 +192,13 @@ function App() {
       </>
     )}
   </div>
+
+{/* Leaderboard Box */}
+<div className="leaderboard-box">
+  <h3>🏆 Leaderboard</h3>
+  <p>🔝 High Score: {localStorage.getItem('highScore') || 0}</p>
+  <p>✨ Can you beat your best score?</p>
+</div>
 </div>
 
 );

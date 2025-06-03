@@ -49,6 +49,7 @@
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #1a1a1a;
@@ -65,7 +66,20 @@
   background-color: #191919;
   color: #fff;
   text-align: center;
+  margin-bottom: 1rem;
 }
+
+.leaderboard-box {
+  border: 2px solid #aaa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+  background-color: #111;
+  color: #fff;
+  text-align: center;
+}
+
 .title {
   margin-bottom: 1rem;
 }
