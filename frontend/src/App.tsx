@@ -3,6 +3,11 @@ import './App.css';
 import { useRef } from 'react';
 
 
+// Define global constant here
+const GAME_TIME = 30;
+const HIGHSCORE_SIZE = 10;
+
+
 type Question = {
   num1: number;
   num2: number;
@@ -40,7 +45,7 @@ function generateQuestion(difficulty: number): Question {
 }
 
 function App() {
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(GAME_TIME);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
@@ -49,19 +54,20 @@ function App() {
   const [wrongCount, setWrongCount] = useState(0);
   const [showRules, setShowRules] = useState(true);
   const [difficulty, setDifficulty] = useState<number | null>(null);
-  const [highScore, setHighScore] = useState(() => {
-  const saved = localStorage.getItem('highScore');
-  return saved ? parseInt(saved) : 0;
+  const [highScores, setHighScores] = useState<number[]>(() => {
+  const saved = localStorage.getItem('highScores');
+  return saved ? JSON.parse(saved) : [];
 });
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const timeRef = useRef(30); // separate from state
+  const timeRef = useRef(GAME_TIME); // separate from state
+  const scoreRef = useRef(0);
 
 useEffect(() => {
   if (!gameStarted) return;
 
-  timeRef.current = 30; // reset on start
-  setTimeLeft(30);
+  timeRef.current = GAME_TIME; // reset on start
+  setTimeLeft(GAME_TIME);
 
   timerRef.current = setInterval(() => {
     timeRef.current -= 1;
@@ -72,11 +78,18 @@ useEffect(() => {
       setGameStarted(false);
       setGameOver(true);
 
-      if (score > highScore) {
-        setHighScore(score);
-        localStorage.setItem('highScore', score.toString());
+
+
+      const updatedScores = [...highScores, scoreRef.current]
+        .sort((a, b) => b - a)
+        .slice(0, HIGHSCORE_SIZE);
+
+
+
+      setHighScores(updatedScores);
+        localStorage.setItem('highScores', JSON.stringify(updatedScores));
       }
-    }
+
   }, 1000);
 
   return () => clearInterval(timerRef.current!);
@@ -85,7 +98,7 @@ useEffect(() => {
 
 
   const startGame = (selectedDifficulty: number) => {
-    setTimeLeft(30);
+    setTimeLeft(GAME_TIME);
     setScore(0);
     setCorrectCount(0);
     setWrongCount(0);
@@ -103,10 +116,18 @@ useEffect(() => {
   const handleAnswer = (selected: number) => {
     if (!question || difficulty === null) return;
     if (selected === question.correctAnswer) {
-      setScore((s) => s + 70);
+      setScore((s) => {
+    const newScore = s + 70;
+    scoreRef.current = newScore;
+    return newScore;
+  });
       setCorrectCount((c) => c + 1);
     } else {
-      setScore((s) => s - 20);
+      setScore((s) => {
+    const newScore = s - 20;
+    scoreRef.current = newScore;
+    return newScore;
+  });
       setWrongCount((w) => w + 1);
     }
     setQuestion(generateQuestion(difficulty));
@@ -195,9 +216,12 @@ useEffect(() => {
 
 {/* Leaderboard Box */}
 <div className="leaderboard-box">
-  <h3>🏆 Leaderboard</h3>
-  <p>🔝 High Score: {localStorage.getItem('highScore') || 0}</p>
-  <p>✨ Can you beat your best score?</p>
+  <h3> Leaderboard</h3>
+  <ol>
+    {highScores.map((s, i) => (
+      <li key={i}>{s}</li>
+    ))}
+  </ol><p>✨ Can you beat your best score?</p>
 </div>
 </div>
 
